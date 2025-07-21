@@ -1,5 +1,7 @@
 import React from 'react'
 import { Clock, Lock, Send, ArrowRight } from 'lucide-react'
+import { motion } from 'framer-motion'
+import Tilt from 'react-parallax-tilt'
 
 interface LandingPageProps {
   onGetStarted: () => void
@@ -8,9 +10,9 @@ interface LandingPageProps {
 
 const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLearnMore }) => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-purple-100">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200">
+      <header className="bg-white/70 backdrop-blur-md border-b border-gray-200 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center space-x-2">
@@ -37,38 +39,51 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLearnMore }) 
 
       {/* Hero Section */}
       <section className="relative py-24 lg:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="w-96 h-96 bg-indigo-300 opacity-30 rounded-full blur-3xl absolute -top-32 -left-32 animate-pulse" />
+          <div className="w-96 h-96 bg-purple-300 opacity-30 rounded-full blur-3xl absolute -bottom-32 -right-32 animate-pulse" />
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center"
+          >
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 drop-shadow-lg">
               Send messages to your
               <span className="text-indigo-600"> future self</span>
             </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto bg-white/60 rounded-xl px-4 py-2 shadow-lg backdrop-blur-md">
               Create time-locked capsules that only unlock when the moment is right.
               Perfect for goals, reminders, or messages of hope.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
+              <motion.button
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.97 }}
                 onClick={onGetStarted}
-                className="bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center justify-center space-x-2"
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-xl hover:shadow-2xl transition-all flex items-center justify-center space-x-2"
               >
                 <Send className="h-5 w-5" />
                 <span>Get Started</span>
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
                 onClick={onLearnMore}
-                className="border border-gray-300 text-gray-700 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center space-x-2"
+                className="border border-gray-300 text-gray-700 px-8 py-4 rounded-lg text-lg font-semibold bg-white/70 shadow-lg hover:bg-gray-50 transition-colors flex items-center justify-center space-x-2"
               >
                 <span>Learn More</span>
                 <ArrowRight className="h-5 w-5" />
-              </button>
+              </motion.button>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 bg-white">
+      <section id="features" className="py-20 bg-white/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -79,39 +94,41 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLearnMore }) 
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="bg-indigo-100 rounded-full p-3 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Lock className="h-8 w-8 text-indigo-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Time-Locked Security
-              </h3>
-              <p className="text-gray-600">
-                Messages remain sealed until your chosen date, creating genuine surprise and anticipation.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="bg-indigo-100 rounded-full p-3 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Clock className="h-8 w-8 text-indigo-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Perfect Timing
-              </h3>
-              <p className="text-gray-600">
-                Set messages for birthdays, anniversaries, or personal milestones you want to remember.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="bg-indigo-100 rounded-full p-3 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Send className="h-8 w-8 text-indigo-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                Meaningful Messages
-              </h3>
-              <p className="text-gray-600">
-                Capture thoughts, goals, and emotions to rediscover later with fresh perspective.
-              </p>
-            </div>
+            {[{
+              icon: <Lock className="h-8 w-8 text-indigo-600" />,
+              title: 'Time-Locked Security',
+              desc: 'Messages remain sealed until your chosen date, creating genuine surprise and anticipation.'
+            }, {
+              icon: <Clock className="h-8 w-8 text-indigo-600" />,
+              title: 'Perfect Timing',
+              desc: 'Set messages for birthdays, anniversaries, or personal milestones you want to remember.'
+            }, {
+              icon: <Send className="h-8 w-8 text-indigo-600" />,
+              title: 'Meaningful Messages',
+              desc: 'Capture thoughts, goals, and emotions to rediscover later with fresh perspective.'
+            }].map((feature, i) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: i * 0.2 }}
+                viewport={{ once: true }}
+              >
+                <Tilt glareEnable={true} glareMaxOpacity={0.2} scale={1.05} tiltMaxAngleX={15} tiltMaxAngleY={15} className="rounded-2xl">
+                  <div className="text-center bg-white/80 rounded-2xl shadow-2xl p-8 hover:shadow-indigo-200 transition-all backdrop-blur-md">
+                    <div className="bg-indigo-100 rounded-full p-3 w-16 h-16 mx-auto mb-4 flex items-center justify-center shadow-lg">
+                      {feature.icon}
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      {feature.title}
+                    </h3>
+                    <p className="text-gray-600">
+                      {feature.desc}
+                    </p>
+                  </div>
+                </Tilt>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
