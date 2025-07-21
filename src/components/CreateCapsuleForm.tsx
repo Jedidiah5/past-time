@@ -13,6 +13,7 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
   const [body, setBody] = useState('')
   const [unlockDate, setUnlockDate] = useState('')
   const [unlockTime, setUnlockTime] = useState('')
+  const [timezone, setTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
@@ -24,30 +25,42 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
     setLoading(true)
 
     try {
-      // Combine date and time into a single ISO string
-      const unlockDateTime = unlockTime
-        ? new Date(`${unlockDate}T${unlockTime}:00`)
-        : new Date(`${unlockDate}T00:00:00`)
-      const now = new Date()
-      if (unlockDateTime <= now) {
-        setError('Unlock date and time must be in the future')
+      // Combine date and time in the selected timezone, then convert to UTC
+      const localDateTimeString = `${unlockDate}T${unlockTime}:00`;
+      const localDate = new Date(localDateTimeString);
+      // Get the offset in minutes for the selected timezone
+      const utcDate = new Date(
+        new Date(localDateTimeString).toLocaleString('en-US', { timeZone: 'UTC' })
+      );
+      const tzDate = new Date(
+        new Date(localDateTimeString).toLocaleString('en-US', { timeZone: timezone })
+      );
+      // Calculate the difference between the selected timezone and UTC
+      const offset = tzDate.getTime() - utcDate.getTime();
+      // Adjust the local date to UTC
+      const unlockDateTimeUTC = new Date(localDate.getTime() - offset);
+      const now = new Date();
+      if (unlockDateTimeUTC <= now) {
+        setError('Unlock date and time must be in the future (UTC)')
         setLoading(false)
         return
       }
       const { error: insertError } = await supabase
         .from('capsules')
         .insert({
-          user_id: userEmail, // Use email as user identifier
+          user_id: userEmail,
           title,
           body,
-          unlock_date: unlockDateTime.toISOString(),
+          unlock_date: unlockDateTimeUTC.toISOString(),
+          timezone,
         })
       if (insertError) throw insertError
-      setSuccess(`Time capsule scheduled! You'll receive "${title}" on ${unlockDateTime.toLocaleString()} at ${userEmail}`)
+      setSuccess(`Time capsule scheduled! You'll receive "${title}" on ${unlockDate} ${unlockTime} (${timezone}) at ${userEmail}`)
       setTitle('')
       setBody('')
       setUnlockDate('')
       setUnlockTime('')
+      setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone)
       setTimeout(() => {
         onSuccess()
       }, 2000)
@@ -125,7 +138,7 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Unlock Date & Time
           </label>
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 mb-2">
             <div className="relative flex-1">
               <Calendar className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
               <input
@@ -148,8 +161,25 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
               />
             </div>
           </div>
+          <div className="mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Timezone</label>
+            <select
+              value={timezone}
+              onChange={e => setTimezone(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              required
+            >
+              {Intl.supportedValuesOf ?
+                Intl.supportedValuesOf('timeZone').map(tz => (
+                  <option key={tz} value={tz}>{tz}</option>
+                )) :
+                [<option key={timezone} value={timezone}>{timezone}</option>]
+              }
+            </select>
+          </div>
           <p className="text-sm text-gray-500 mt-1">
-            Choose when you want to receive this message at {userEmail}
+            Choose when you want to receive this message at {userEmail}.<br />
+            The unlock time will be converted to UTC based on your selected timezone.
           </p>
         </div>
 
