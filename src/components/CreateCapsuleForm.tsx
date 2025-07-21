@@ -25,23 +25,23 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
     setLoading(true)
 
     try {
-      // Combine date and time in the selected timezone, then convert to UTC
+      // Combine date and time as entered by the user (local time in selected timezone)
       const localDateTimeString = `${unlockDate}T${unlockTime}:00`;
-      const localDate = new Date(localDateTimeString);
-      // Get the offset in minutes for the selected timezone
-      const utcDate = new Date(
-        new Date(localDateTimeString).toLocaleString('en-US', { timeZone: 'UTC' })
-      );
-      const tzDate = new Date(
-        new Date(localDateTimeString).toLocaleString('en-US', { timeZone: timezone })
-      );
-      // Calculate the difference between the selected timezone and UTC
-      const offset = tzDate.getTime() - utcDate.getTime();
-      // Adjust the local date to UTC
-      const unlockDateTimeUTC = new Date(localDate.getTime() - offset);
+      const unlockDateTime = new Date(localDateTimeString);
       const now = new Date();
-      if (unlockDateTimeUTC <= now) {
-        setError('Unlock date and time must be in the future (UTC)')
+      // Validation: must be at least 5 minutes in the future if today (in local time)
+      if (unlockDate === minDate) {
+        const nowInTzString = now.toLocaleString('en-US', { timeZone: timezone });
+        const nowInTz = new Date(nowInTzString);
+        const minAllowedInTz = new Date(nowInTz.getTime() + 5 * 60000);
+        const unlockInTz = new Date(localDateTimeString);
+        if (unlockInTz < minAllowedInTz) {
+          setError('Time must be at least 5 minutes from now if today is selected')
+          setLoading(false)
+          return
+        }
+      } else if (unlockDateTime <= now) {
+        setError('Unlock date and time must be in the future')
         setLoading(false)
         return
       }
@@ -51,7 +51,7 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
           user_id: userEmail,
           title,
           body,
-          unlock_date: unlockDateTimeUTC.toISOString(),
+          unlock_date: unlockDateTime.toISOString(),
           timezone,
         })
       if (insertError) throw insertError
@@ -71,10 +71,18 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
     }
   }
 
-  // Get minimum date (tomorrow)
-  const tomorrow = new Date()
-  tomorrow.setDate(tomorrow.getDate() + 1)
-  const minDate = tomorrow.toISOString().split('T')[0]
+  // Get minimum date (today)
+  const today = new Date()
+  const minDate = today.toISOString().split('T')[0]
+
+  // Helper: get min time if today is selected
+  let minTime = ''
+  if (unlockDate === minDate) {
+    // 5 minutes from now, formatted as HH:MM
+    const now = new Date()
+    now.setMinutes(now.getMinutes() + 5)
+    minTime = now.toTimeString().slice(0,5)
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
@@ -156,6 +164,7 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
                 type="time"
                 value={unlockTime}
                 onChange={(e) => setUnlockTime(e.target.value)}
+                min={minTime || undefined}
                 className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 required
               />
