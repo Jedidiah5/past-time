@@ -12,6 +12,7 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [unlockDate, setUnlockDate] = useState('')
+  const [unlockTime, setUnlockTime] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
@@ -23,35 +24,30 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
     setLoading(true)
 
     try {
-      // Validate unlock date is in the future
-      const selectedDate = new Date(unlockDate)
+      // Combine date and time into a single ISO string
+      const unlockDateTime = unlockTime
+        ? new Date(`${unlockDate}T${unlockTime}:00`)
+        : new Date(`${unlockDate}T00:00:00`)
       const now = new Date()
-      
-      if (selectedDate <= now) {
-        setError('Unlock date must be in the future')
+      if (unlockDateTime <= now) {
+        setError('Unlock date and time must be in the future')
+        setLoading(false)
         return
       }
-
       const { error: insertError } = await supabase
         .from('capsules')
         .insert({
           user_id: userEmail, // Use email as user identifier
           title,
           body,
-          unlock_date: unlockDate,
+          unlock_date: unlockDateTime.toISOString(),
         })
-
       if (insertError) throw insertError
-      
-      // Show success message about scheduling
-      setSuccess(`Time capsule scheduled! You'll receive "${title}" on ${new Date(unlockDate).toLocaleDateString()} at ${userEmail}`)
-      
-      // Clear form
+      setSuccess(`Time capsule scheduled! You'll receive "${title}" on ${unlockDateTime.toLocaleString()} at ${userEmail}`)
       setTitle('')
       setBody('')
       setUnlockDate('')
-      
-      // Call onSuccess after a delay to show the message
+      setUnlockTime('')
       setTimeout(() => {
         onSuccess()
       }, 2000)
@@ -127,18 +123,30 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Unlock Date
+            Unlock Date & Time
           </label>
-          <div className="relative">
-            <Calendar className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-            <input
-              type="date"
-              value={unlockDate}
-              onChange={(e) => setUnlockDate(e.target.value)}
-              min={minDate}
-              className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-              required
-            />
+          <div className="flex space-x-2">
+            <div className="relative flex-1">
+              <Calendar className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+              <input
+                type="date"
+                value={unlockDate}
+                onChange={(e) => setUnlockDate(e.target.value)}
+                min={minDate}
+                className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                required
+              />
+            </div>
+            <div className="relative flex-1">
+              <Clock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+              <input
+                type="time"
+                value={unlockTime}
+                onChange={(e) => setUnlockTime(e.target.value)}
+                className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                required
+              />
+            </div>
           </div>
           <p className="text-sm text-gray-500 mt-1">
             Choose when you want to receive this message at {userEmail}
