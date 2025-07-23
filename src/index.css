@@ -4,3 +4,37 @@ html, body {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom styles for react-time-picker */
+.react-time-picker {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+  box-shadow: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.react-time-picker:focus-within {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px #6366f1;
+}
+.react-time-picker__wrapper {
+  border: none;
+  box-shadow: none;
+}
+.react-time-picker__inputGroup input {
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+.react-time-picker__inputGroup input:focus {
+  outline: none;
+}
+.react-time-picker__clock-button,
+.react-time-picker__clear-button {
+  display: none;
+}

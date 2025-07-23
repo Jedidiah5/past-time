@@ -1,6 +1,11 @@
 import React, { useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { Calendar, FileText, Send, X, AlertCircle, Clock } from 'lucide-react'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import TimePicker from 'react-time-picker'
+import 'react-time-picker/dist/TimePicker.css'
+import Select from 'react-select'
 
 interface CreateCapsuleFormProps {
   userEmail: string
@@ -8,12 +13,17 @@ interface CreateCapsuleFormProps {
   onCancel: () => void
 }
 
+const timezoneOptions = (Intl.supportedValuesOf
+  ? Intl.supportedValuesOf('timeZone')
+  : [Intl.DateTimeFormat().resolvedOptions().timeZone]
+).map(tz => ({ value: tz, label: tz }))
+
 const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSuccess, onCancel }) => {
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
-  const [unlockDate, setUnlockDate] = useState('')
+  const [unlockDate, setUnlockDate] = useState<Date | null>(null)
   const [unlockTime, setUnlockTime] = useState('')
-  const [timezone, setTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone)
+  const [timezone, setTimezone] = useState({ value: Intl.DateTimeFormat().resolvedOptions().timeZone, label: Intl.DateTimeFormat().resolvedOptions().timeZone })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
@@ -25,22 +35,17 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
     setLoading(true)
 
     try {
+      if (!unlockDate || !unlockTime) {
+        setError('Please select both date and time')
+        setLoading(false)
+        return
+      }
       // Combine date and time as entered by the user (local time in selected timezone)
-      const localDateTimeString = `${unlockDate}T${unlockTime}:00`;
-      const unlockDateTime = new Date(localDateTimeString);
-      const now = new Date();
-      // Validation: must be at least 5 minutes in the future if today (in local time)
-      if (unlockDate === minDate) {
-        const nowInTzString = now.toLocaleString('en-US', { timeZone: timezone });
-        const nowInTz = new Date(nowInTzString);
-        const minAllowedInTz = new Date(nowInTz.getTime() + 5 * 60000);
-        const unlockInTz = new Date(localDateTimeString);
-        if (unlockInTz < minAllowedInTz) {
-          setError('Time must be at least 5 minutes from now if today is selected')
-          setLoading(false)
-          return
-        }
-      } else if (unlockDateTime <= now) {
+      const [hours, minutes] = unlockTime.split(':')
+      const unlockDateTime = new Date(unlockDate)
+      unlockDateTime.setHours(Number(hours), Number(minutes), 0, 0)
+      const now = new Date()
+      if (unlockDateTime <= now) {
         setError('Unlock date and time must be in the future')
         setLoading(false)
         return
@@ -52,15 +57,15 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
           title,
           body,
           unlock_date: unlockDateTime.toISOString(),
-          timezone,
+          timezone: timezone.value,
         })
       if (insertError) throw insertError
-      setSuccess(`Time capsule scheduled! You'll receive "${title}" on ${unlockDate} ${unlockTime} (${timezone}) at ${userEmail}`)
+      setSuccess(`Time capsule scheduled! You'll receive "${title}" on ${unlockDateTime.toLocaleDateString()} ${unlockTime} (${timezone.value}) at ${userEmail}`)
       setTitle('')
       setBody('')
-      setUnlockDate('')
+      setUnlockDate(null)
       setUnlockTime('')
-      setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone)
+      setTimezone({ value: Intl.DateTimeFormat().resolvedOptions().timeZone, label: Intl.DateTimeFormat().resolvedOptions().timeZone })
       setTimeout(() => {
         onSuccess()
       }, 2000)
@@ -71,18 +76,7 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
     }
   }
 
-  // Get minimum date (today)
   const today = new Date()
-  const minDate = today.toISOString().split('T')[0]
-
-  // Helper: get min time if today is selected
-  let minTime = ''
-  if (unlockDate === minDate) {
-    // 5 minutes from now, formatted as HH:MM
-    const now = new Date()
-    now.setMinutes(now.getMinutes() + 5)
-    minTime = now.toTimeString().slice(0,5)
-  }
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
@@ -115,17 +109,14 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Capsule Title
           </label>
-          <div className="relative">
-            <FileText className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Give your capsule a meaningful title"
-              required
-            />
-          </div>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full bg-gray-100 text-blue-700 placeholder-blue-400 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-400 border-none"
+            placeholder="Title"
+            required
+          />
         </div>
 
         <div>
@@ -136,8 +127,8 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
             value={body}
             onChange={(e) => setBody(e.target.value)}
             rows={6}
-            className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-            placeholder="Write your message here... What do you want to tell your future self?"
+            className="w-full bg-gray-100 text-blue-700 placeholder-blue-400 rounded-lg px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-400 border-none"
+            placeholder="Write your message here..."
             required
           />
         </div>
@@ -146,45 +137,43 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Unlock Date & Time
           </label>
-          <div className="flex space-x-2 mb-2">
+          <div className="flex flex-col md:flex-row md:space-x-2 mb-2 gap-2">
             <div className="relative flex-1">
-              <Calendar className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-              <input
-                type="date"
-                value={unlockDate}
-                onChange={(e) => setUnlockDate(e.target.value)}
-                min={minDate}
+              <Calendar className="absolute left-3 top-3 h-5 w-5 text-gray-400 z-10" />
+              <DatePicker
+                selected={unlockDate}
+                onChange={date => setUnlockDate(date)}
+                minDate={today}
                 className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholderText="Select date"
+                dateFormat="MM/dd/yyyy"
                 required
               />
             </div>
             <div className="relative flex-1">
-              <Clock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-              <input
-                type="time"
+              <Clock className="absolute left-3 top-3 h-5 w-5 text-gray-400 z-10" />
+              <TimePicker
+                onChange={setUnlockTime}
                 value={unlockTime}
-                onChange={(e) => setUnlockTime(e.target.value)}
-                min={minTime || undefined}
+                disableClock={true}
+                clearIcon={null}
                 className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                format="HH:mm"
                 required
               />
             </div>
           </div>
           <div className="mb-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">Timezone</label>
-            <select
+            <Select
+              options={timezoneOptions}
               value={timezone}
-              onChange={e => setTimezone(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              onChange={tz => setTimezone(tz!)}
+              classNamePrefix="react-select"
+              className="w-full"
+              isSearchable
               required
-            >
-              {Intl.supportedValuesOf ?
-                Intl.supportedValuesOf('timeZone').map(tz => (
-                  <option key={tz} value={tz}>{tz}</option>
-                )) :
-                [<option key={timezone} value={timezone}>{timezone}</option>]
-              }
-            </select>
+            />
           </div>
           <p className="text-sm text-gray-500 mt-1">
             Choose when you want to receive this message at {userEmail}.<br />
