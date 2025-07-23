@@ -73,7 +73,7 @@ const Dashboard: React.FC<DashboardProps> = ({ initialEmail = '', initialEmailSe
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-purple-100 flex items-center justify-center">
         <div className="text-center">
           <Clock className="h-12 w-12 text-indigo-600 mx-auto mb-4 animate-spin" />
           <p className="text-gray-600">Loading your time capsules...</p>
@@ -85,7 +85,7 @@ const Dashboard: React.FC<DashboardProps> = ({ initialEmail = '', initialEmailSe
   // Show email input form if email not set
   if (!emailSet) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-purple-100 flex items-center justify-center">
         <div className="max-w-md w-full">
           <div className="bg-white rounded-lg shadow-lg p-8">
             <div className="text-center mb-8">
@@ -133,7 +133,7 @@ const Dashboard: React.FC<DashboardProps> = ({ initialEmail = '', initialEmailSe
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-purple-100">
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

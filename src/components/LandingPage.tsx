@@ -2,10 +2,10 @@ import React from 'react'
 import { Clock, Lock, Send, ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Tilt from 'react-parallax-tilt'
-import image0 from '../image0.jpg';
-import image1 from '../image1.jpg';
-import image2 from '../image2.jpg';
-import image3 from '../image3.jpg';
+import image2 from '../image0.jpg';
+import image3 from '../image1.jpg';
+import image0 from '../image2.jpg';
+import image1 from '../image3.jpg';
 
 interface LandingPageProps {
   onGetStarted: () => void
@@ -16,27 +16,30 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLearnMore }) 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-purple-100">
       {/* Header */}
-      <header className="bg-white/70 backdrop-blur-md border-b border-gray-200 shadow-lg">
+      <header className="fixed top-0 left-0 w-full z-30 bg-white/30 backdrop-blur-lg transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center space-x-2">
-              <Clock className="h-8 w-8 text-indigo-600" />
-              <span className="text-2xl font-bold text-gray-900">PastTime</span>
+          <div className="flex items-center justify-between py-4 md:py-6 w-full">
+            {/* Left: Nav Links */}
+            <nav className="flex items-center space-x-8">
+              <a href="#features" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Features</a>
+              <a href="#how-it-works" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">How it works</a>
+            </nav>
+            {/* Center: Logo */}
+            <div className="flex-1 flex justify-center items-center absolute left-1/2 transform -translate-x-1/2">
+              <div className="flex flex-col items-center">
+                <Clock className="h-8 w-8 text-indigo-600" />
+                <span className="text-xs font-bold text-gray-900 tracking-widest mt-1">PASTTIME</span>
+              </div>
             </div>
-            <nav className="hidden md:flex space-x-8">
-              <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">
-                Features
-              </a>
-              <a href="#how-it-works" className="text-gray-600 hover:text-gray-900 transition-colors">
-                How it works
-              </a>
+            {/* Right: CTA */}
+            <div className="flex items-center justify-end">
               <button
                 onClick={onGetStarted}
-                className="bg-indigo-600 text-white px-6 py-2 rounded-full font-semibold shadow hover:bg-indigo-700 transition-colors"
+                className="bg-black text-white px-6 py-2 rounded-full font-semibold shadow hover:bg-indigo-700 transition-colors"
               >
                 Get Started
               </button>
-            </nav>
+            </div>
           </div>
         </div>
       </header>
@@ -70,7 +73,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLearnMore }) 
                 onClick={onLearnMore}
                 className="border border-gray-300 text-gray-700 px-8 py-4 rounded-full text-lg font-semibold bg-white/70 shadow-lg hover:bg-gray-50 transition-colors flex items-center justify-center space-x-2"
               >
-                <span>Book A Demo</span>
+                <span>See How it works</span>
                 <ArrowRight className="h-5 w-5" />
               </button>
             </div>
