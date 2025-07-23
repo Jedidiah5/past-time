@@ -15,14 +15,26 @@ interface Capsule {
   media_url?: string
 }
 
-const Dashboard: React.FC = () => {
+interface DashboardProps {
+  initialEmail?: string
+  initialEmailSet?: boolean
+}
+
+const Dashboard: React.FC<DashboardProps> = ({ initialEmail = '', initialEmailSet = false }) => {
   const [capsules, setCapsules] = useState<Capsule[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateForm, setShowCreateForm] = useState(false)
-  const [userEmail, setUserEmail] = useState('')
-  const [emailSet, setEmailSet] = useState(false)
+  const [userEmail, setUserEmail] = useState(initialEmail)
+  const [emailSet, setEmailSet] = useState(initialEmailSet)
 
   useEffect(() => {
+    if (!userEmail) {
+      const savedEmail = localStorage.getItem('userEmail')
+      if (savedEmail) {
+        setUserEmail(savedEmail)
+        setEmailSet(true)
+      }
+    }
     fetchCapsules()
   }, [])
 
@@ -46,6 +58,7 @@ const Dashboard: React.FC = () => {
     e.preventDefault()
     if (userEmail.trim()) {
       setEmailSet(true)
+      localStorage.setItem('userEmail', userEmail.trim())
     }
   }
 

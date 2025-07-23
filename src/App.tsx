@@ -1,12 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import LandingPage from './components/LandingPage'
 import Dashboard from './components/Dashboard'
 
 const AppContent: React.FC = () => {
   const [showDashboard, setShowDashboard] = useState(false)
+  const [savedEmail, setSavedEmail] = useState<string | null>(null)
+
+  useEffect(() => {
+    const email = localStorage.getItem('userEmail')
+    if (email) {
+      setSavedEmail(email)
+      setShowDashboard(true)
+    }
+  }, [])
 
   if (showDashboard) {
-    return <Dashboard />
+    return <Dashboard initialEmail={savedEmail || ''} initialEmailSet={!!savedEmail} />
   }
   return (
     <LandingPage
