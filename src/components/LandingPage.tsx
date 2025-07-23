@@ -2,10 +2,10 @@ import React from 'react'
 import { Clock, Lock, Send, ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Tilt from 'react-parallax-tilt'
-import image2 from '../image0.jpg';
-import image3 from '../image1.jpg';
-import image0 from '../image2.jpg';
-import image1 from '../image3.jpg';
+import image2 from '../image0.webp';
+import image3 from '../image1.webp';
+import image0 from '../image2.webp';
+import image1 from '../image3.webp';
 
 interface LandingPageProps {
   onGetStarted: () => void
@@ -82,16 +82,16 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLearnMore }) 
           {/* Image Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
             <div className="rounded-2xl overflow-hidden shadow-lg bg-white aspect-square flex items-center justify-center">
-              <img src={image0} alt="Capsule 1" className="object-cover w-full h-full" />
+              <img src={image0} alt="Capsule 1" className="object-cover w-full h-full" loading="lazy" />
             </div>
             <div className="rounded-2xl overflow-hidden shadow-lg bg-white aspect-square flex items-center justify-center">
-              <img src={image1} alt="Capsule 2" className="object-cover w-full h-full" />
+              <img src={image1} alt="Capsule 2" className="object-cover w-full h-full" loading="lazy" />
             </div>
             <div className="rounded-2xl overflow-hidden shadow-lg bg-white aspect-square flex items-center justify-center">
-              <img src={image2} alt="Capsule 3" className="object-cover w-full h-full" />
+              <img src={image2} alt="Capsule 3" className="object-cover w-full h-full" loading="lazy" />
             </div>
             <div className="rounded-2xl overflow-hidden shadow-lg bg-white aspect-square flex items-center justify-center">
-              <img src={image3} alt="Capsule 4" className="object-cover w-full h-full" />
+              <img src={image3} alt="Capsule 4" className="object-cover w-full h-full" loading="lazy" />
             </div>
           </div>
         </div>
