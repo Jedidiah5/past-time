@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import { Clock, Plus, Calendar, Lock, Unlock, Mail } from 'lucide-react'
+import { Clock, Plus, Calendar, Lock, Unlock, Mail, LogOut } from 'lucide-react'
 import { format, isAfter, formatDistanceToNow } from 'date-fns'
 import CreateCapsuleForm from './CreateCapsuleForm'
 import CapsuleCard from './CapsuleCard'
@@ -18,9 +18,10 @@ interface Capsule {
 interface DashboardProps {
   initialEmail?: string
   initialEmailSet?: boolean
+  onLogout?: () => void
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ initialEmail = '', initialEmailSet = false }) => {
+const Dashboard: React.FC<DashboardProps> = ({ initialEmail = '', initialEmailSet = false, onLogout }) => {
   const [capsules, setCapsules] = useState<Capsule[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateForm, setShowCreateForm] = useState(false)
@@ -143,6 +144,13 @@ const Dashboard: React.FC<DashboardProps> = ({ initialEmail = '', initialEmailSe
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-gray-600">{userEmail}</span>
+              <button
+                onClick={onLogout}
+                title="Log out"
+                className="ml-2 p-2 rounded-full hover:bg-gray-100 transition-colors"
+              >
+                <LogOut className="h-6 w-6 text-gray-500 hover:text-red-500" />
+              </button>
             </div>
           </div>
         </div>

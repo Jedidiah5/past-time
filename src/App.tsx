@@ -14,8 +14,14 @@ const AppContent: React.FC = () => {
     }
   }, [])
 
+  const handleLogout = () => {
+    localStorage.removeItem('userEmail')
+    setSavedEmail(null)
+    setShowDashboard(false)
+  }
+
   if (showDashboard) {
-    return <Dashboard initialEmail={savedEmail || ''} initialEmailSet={!!savedEmail} />
+    return <Dashboard initialEmail={savedEmail || ''} initialEmailSet={!!savedEmail} onLogout={handleLogout} />
   }
   return (
     <LandingPage

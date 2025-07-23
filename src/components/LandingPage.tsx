@@ -2,6 +2,10 @@ import React from 'react'
 import { Clock, Lock, Send, ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Tilt from 'react-parallax-tilt'
+import image0 from '../image0.jpg';
+import image1 from '../image1.jpg';
+import image2 from '../image2.jpg';
+import image3 from '../image3.jpg';
 
 interface LandingPageProps {
   onGetStarted: () => void
@@ -28,7 +32,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLearnMore }) 
               </a>
               <button
                 onClick={onGetStarted}
-                className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+                className="bg-indigo-600 text-white px-6 py-2 rounded-full font-semibold shadow hover:bg-indigo-700 transition-colors"
               >
                 Get Started
               </button>
@@ -38,47 +42,55 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLearnMore }) 
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-24 lg:py-32">
+      <section className="relative py-20 lg:py-32 flex flex-col items-center justify-center text-center">
         <div className="absolute inset-0 pointer-events-none">
           <div className="w-96 h-96 bg-indigo-300 opacity-30 rounded-full blur-3xl absolute -top-32 -left-32 animate-pulse" />
           <div className="w-96 h-96 bg-purple-300 opacity-30 rounded-full blur-3xl absolute -bottom-32 -right-32 animate-pulse" />
         </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 drop-shadow-lg">
-              Send messages to your
-              <span className="text-indigo-600"> future self</span>
+        <div className="max-w-3xl mx-auto relative z-10">
+          <div className="mb-4">
+            <span className="inline-block bg-indigo-100 text-indigo-700 text-xs font-bold rounded-full px-4 py-1 tracking-widest mb-4 shadow">TIME CAPSULES</span>
+            <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
+              The Most Meaningful Way To <br className="hidden md:block" />
+              <span className="text-indigo-600">Connect With Your Future</span>
             </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto bg-white/60 rounded-xl px-4 py-2 shadow-lg backdrop-blur-md">
-              Create time-locked capsules that only unlock when the moment is right.
-              Perfect for goals, reminders, or messages of hope.
+            <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+              PastTime lets you send messages, memories, and goals to your future self. Lock your thoughts in a digital capsule and rediscover them when the time is right.<br />
+              Celebrate milestones, reflect on your journey, and preserve your most important moments for tomorrow.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.button
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.97 }}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
+              <button
                 onClick={onGetStarted}
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold shadow-xl hover:shadow-2xl transition-all flex items-center justify-center space-x-2"
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-full text-lg font-semibold shadow-xl hover:shadow-2xl transition-all flex items-center justify-center space-x-2"
               >
                 <Send className="h-5 w-5" />
-                <span>Get Started</span>
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.97 }}
+                <span>Get Started — For Free!</span>
+              </button>
+              <button
                 onClick={onLearnMore}
-                className="border border-gray-300 text-gray-700 px-8 py-4 rounded-lg text-lg font-semibold bg-white/70 shadow-lg hover:bg-gray-50 transition-colors flex items-center justify-center space-x-2"
+                className="border border-gray-300 text-gray-700 px-8 py-4 rounded-full text-lg font-semibold bg-white/70 shadow-lg hover:bg-gray-50 transition-colors flex items-center justify-center space-x-2"
               >
-                <span>Learn More</span>
+                <span>Book A Demo</span>
                 <ArrowRight className="h-5 w-5" />
-              </motion.button>
+              </button>
             </div>
-          </motion.div>
+          </div>
+
+          {/* Image Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+            <div className="rounded-2xl overflow-hidden shadow-lg bg-white aspect-square flex items-center justify-center">
+              <img src={image0} alt="Capsule 1" className="object-cover w-full h-full" />
+            </div>
+            <div className="rounded-2xl overflow-hidden shadow-lg bg-white aspect-square flex items-center justify-center">
+              <img src={image1} alt="Capsule 2" className="object-cover w-full h-full" />
+            </div>
+            <div className="rounded-2xl overflow-hidden shadow-lg bg-white aspect-square flex items-center justify-center">
+              <img src={image2} alt="Capsule 3" className="object-cover w-full h-full" />
+            </div>
+            <div className="rounded-2xl overflow-hidden shadow-lg bg-white aspect-square flex items-center justify-center">
+              <img src={image3} alt="Capsule 4" className="object-cover w-full h-full" />
+            </div>
+          </div>
         </div>
       </section>
 
