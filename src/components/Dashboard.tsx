@@ -150,16 +150,25 @@ const Dashboard: React.FC<DashboardProps> = ({ initialEmail = '', initialEmailSe
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-purple-100">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
+      {/* Header - styled to match Landing Page */}
+      <header className="fixed top-0 left-0 w-full z-30 bg-white/30 backdrop-blur-lg transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center space-x-2">
-              <Clock className="h-8 w-8 text-indigo-600" />
-              <span className="text-2xl font-bold text-gray-900">PastTime</span>
+          <div className="flex items-center justify-between py-4 md:py-6 w-full">
+            {/* Left: Nav Links */}
+            <nav className="flex items-center space-x-8">
+              <a href="#features" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Features</a>
+              <a href="#how-it-works" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">How it works</a>
+            </nav>
+            {/* Center: Logo */}
+            <div className="flex-1 flex justify-center items-center absolute left-1/2 transform -translate-x-1/2">
+              <div className="flex flex-col items-center">
+                <Clock className="h-8 w-8 text-indigo-600" />
+                <span className="text-xs font-bold text-gray-900 tracking-widest mt-1">PASTTIME</span>
+              </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-600">{userEmail}</span>
+            {/* Right: User Email & Logout */}
+            <div className="flex items-center justify-end space-x-4">
+              <span className="text-gray-600 font-medium bg-white/60 px-4 py-2 rounded-full shadow-sm">{userEmail}</span>
               <button
                 onClick={onLogout}
                 title="Log out"
@@ -172,7 +181,8 @@ const Dashboard: React.FC<DashboardProps> = ({ initialEmail = '', initialEmailSe
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Add padding to account for fixed header */}
+      <div className="pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Create Capsule Button */}
         <div className="mb-8">
           <button
