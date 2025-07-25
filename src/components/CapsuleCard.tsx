@@ -1,5 +1,5 @@
-import React from 'react'
-import { Calendar, Clock, Lock, Unlock } from 'lucide-react'
+import React, { useState } from 'react'
+import { Calendar, Clock, Lock, Unlock, MoreVertical, Info, Trash2 } from 'lucide-react'
 import { format, formatDistanceToNow } from 'date-fns'
 import { motion } from 'framer-motion'
 import Tilt from 'react-parallax-tilt'
@@ -17,11 +17,13 @@ interface Capsule {
 interface CapsuleCardProps {
   capsule: Capsule
   isUnlocked: boolean
+  onDelete?: (id: string) => void
 }
 
-const CapsuleCard: React.FC<CapsuleCardProps> = ({ capsule, isUnlocked }) => {
+const CapsuleCard: React.FC<CapsuleCardProps> = ({ capsule, isUnlocked, onDelete }) => {
   const unlockDate = new Date(capsule.unlock_date)
   const createdDate = new Date(capsule.created_at)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   return (
     <motion.div
@@ -35,13 +37,39 @@ const CapsuleCard: React.FC<CapsuleCardProps> = ({ capsule, isUnlocked }) => {
         <div className={`bg-white/70 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 hover:shadow-indigo-200 ${!isUnlocked ? 'relative' : ''}`}>
           {/* Locked Overlay */}
           {!isUnlocked && (
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-900/70 to-indigo-700/60 backdrop-blur-md z-10 flex items-center justify-center rounded-2xl">
-              <div className="text-center text-white drop-shadow-lg">
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-900/70 to-indigo-700/60 backdrop-blur-md z-10 flex flex-col items-center justify-center rounded-2xl">
+              <div className="text-center text-white drop-shadow-lg mb-4">
                 <Lock className="h-12 w-12 mx-auto mb-4 animate-bounce" />
                 <p className="text-lg font-semibold mb-2">Locked</p>
                 <p className="text-sm">
                   Unlocks {formatDistanceToNow(unlockDate, { addSuffix: true })}
                 </p>
+              </div>
+              {/* 3-dot menu in top right */}
+              <div className="absolute top-3 right-3 z-30">
+                <button
+                  onClick={() => setMenuOpen((open) => !open)}
+                  className="p-2 rounded-full bg-white/20 hover:bg-white/40 text-white focus:outline-none"
+                  aria-label="Options"
+                >
+                  <MoreVertical className="h-6 w-6" />
+                </button>
+                {menuOpen && (
+                  <div className="absolute right-0 mt-2 w-36 bg-white rounded-lg shadow-lg z-40 text-gray-800">
+                    <button
+                      className="flex items-center w-full px-4 py-2 hover:bg-gray-100 rounded-t-lg"
+                      onClick={() => { setMenuOpen(false); alert(`Title: ${capsule.title}\nUnlocks: ${unlockDate.toLocaleString()}\nCreated: ${createdDate.toLocaleString()}`) }}
+                    >
+                      <Info className="h-4 w-4 mr-2 text-blue-500" /> Info
+                    </button>
+                    <button
+                      className="flex items-center w-full px-4 py-2 hover:bg-red-100 text-red-600 rounded-b-lg"
+                      onClick={() => { setMenuOpen(false); if (window.confirm('Are you sure you want to delete this capsule?')) onDelete && onDelete(capsule.id) }}
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" /> Delete
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )}

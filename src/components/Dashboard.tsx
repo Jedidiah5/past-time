@@ -71,6 +71,22 @@ const Dashboard: React.FC<DashboardProps> = ({ initialEmail = '', initialEmailSe
     !isAfter(new Date(), new Date(capsule.unlock_date))
   )
 
+  // Add delete handler for locked capsules
+  const handleDeleteCapsule = async (id: string) => {
+    try {
+      // Only delete if sent_at is null (not sent)
+      const { error } = await supabase
+        .from('capsules')
+        .delete()
+        .eq('id', id)
+        .is('sent_at', null)
+      if (error) throw error
+      fetchCapsules()
+    } catch (err) {
+      alert('Failed to delete capsule. It may have already been sent or there was an error.')
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-purple-100 flex items-center justify-center">
@@ -210,7 +226,7 @@ const Dashboard: React.FC<DashboardProps> = ({ initialEmail = '', initialEmailSe
             </div>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {lockedCapsules.map((capsule) => (
-                <CapsuleCard key={capsule.id} capsule={capsule} isUnlocked={false} />
+                <CapsuleCard key={capsule.id} capsule={capsule} isUnlocked={false} onDelete={handleDeleteCapsule} />
               ))}
             </div>
           </div>

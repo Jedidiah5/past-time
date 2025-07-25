@@ -6,6 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import TimePicker from 'react-time-picker'
 import 'react-time-picker/dist/TimePicker.css'
 import Select from 'react-select'
+import { DateTime } from 'luxon'
 
 interface CreateCapsuleFormProps {
   userEmail: string
@@ -40,12 +41,21 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
         setLoading(false)
         return
       }
-      // Combine date and time as entered by the user (local time in selected timezone)
+      // Use Luxon to combine date, time, and timezone, then convert to UTC
       const [hours, minutes] = unlockTime.split(':')
-      const unlockDateTime = new Date(unlockDate)
-      unlockDateTime.setHours(Number(hours), Number(minutes), 0, 0)
-      const now = new Date()
-      if (unlockDateTime <= now) {
+      const local = DateTime.fromObject(
+        {
+          year: unlockDate.getFullYear(),
+          month: unlockDate.getMonth() + 1,
+          day: unlockDate.getDate(),
+          hour: Number(hours),
+          minute: Number(minutes),
+        },
+        { zone: timezone.value }
+      )
+      const unlockDateTimeUTC = local.toUTC().toISO()
+      const now = DateTime.utc()
+      if (local <= now) {
         setError('Unlock date and time must be in the future')
         setLoading(false)
         return
@@ -56,11 +66,11 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
           user_id: userEmail,
           title,
           body,
-          unlock_date: unlockDateTime.toISOString(),
+          unlock_date: unlockDateTimeUTC,
           timezone: timezone.value,
         })
       if (insertError) throw insertError
-      setSuccess(`Time capsule scheduled! You'll receive "${title}" on ${unlockDateTime.toLocaleDateString()} ${unlockTime} (${timezone.value}) at ${userEmail}`)
+      setSuccess(`Time capsule scheduled! You'll receive "${title}" on ${local.toLocaleString(DateTime.DATETIME_MED)} (${timezone.value}) at ${userEmail}`)
       setTitle('')
       setBody('')
       setUnlockDate(null)
