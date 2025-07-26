@@ -31,7 +31,9 @@ const createMockClient = () => ({
       order: () => Promise.resolve({ data: [], error: null }),
       eq: () => ({ is: () => Promise.resolve({ data: [], error: null }) })
     }),
-    insert: () => Promise.reject(new Error('Supabase not configured. Please set up your Supabase credentials.')),
+    insert: () => ({
+      select: () => Promise.reject(new Error('Supabase not configured. Please set up your Supabase credentials.'))
+    }),
     update: () => ({ eq: () => Promise.reject(new Error('Supabase not configured. Please set up your Supabase credentials.')) }),
     delete: () => ({ eq: () => ({ is: () => Promise.reject(new Error('Supabase not configured. Please set up your Supabase credentials.')) }) })
   })
