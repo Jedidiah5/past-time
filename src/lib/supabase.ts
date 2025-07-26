@@ -9,6 +9,14 @@ const hasValidCredentials = supabaseUrl &&
   supabaseUrl !== 'https://your-project.supabase.co' &&
   supabaseAnonKey !== 'your-anon-key'
 
+// Log configuration status for debugging
+console.log('Supabase Configuration:', {
+  hasUrl: !!supabaseUrl,
+  hasKey: !!supabaseAnonKey,
+  url: supabaseUrl ? `${supabaseUrl.substring(0, 20)}...` : 'missing',
+  hasValidCredentials
+})
+
 // Create a mock client for development when credentials aren't set
 const createMockClient = () => ({
   auth: {
@@ -19,8 +27,13 @@ const createMockClient = () => ({
     signOut: () => Promise.resolve({ error: null })
   },
   from: () => ({
-    select: () => ({ order: () => Promise.resolve({ data: [], error: null }) }),
-    insert: () => Promise.reject(new Error('Supabase not configured. Please set up your Supabase credentials.'))
+    select: () => ({ 
+      order: () => Promise.resolve({ data: [], error: null }),
+      eq: () => ({ is: () => Promise.resolve({ data: [], error: null }) })
+    }),
+    insert: () => Promise.reject(new Error('Supabase not configured. Please set up your Supabase credentials.')),
+    update: () => ({ eq: () => Promise.reject(new Error('Supabase not configured. Please set up your Supabase credentials.')) }),
+    delete: () => ({ eq: () => ({ is: () => Promise.reject(new Error('Supabase not configured. Please set up your Supabase credentials.')) }) })
   })
 })
 

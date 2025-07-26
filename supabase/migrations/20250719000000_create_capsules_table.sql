@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS public.capsules (
     unlock_date TIMESTAMP WITH TIME ZONE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
     sent_at TIMESTAMP WITH TIME ZONE,
-    media_url TEXT
+    media_url TEXT,
+    timezone TEXT
 );
 
 -- Add indexes for better query performance
@@ -20,17 +21,23 @@ ALTER TABLE public.capsules ENABLE ROW LEVEL SECURITY;
 -- Create a policy that allows users to insert their own capsules
 CREATE POLICY "Users can insert their own capsules"
 ON public.capsules FOR INSERT
-TO authenticated
+TO anon
 WITH CHECK (true);
 
 -- Create a policy that allows users to view their own capsules
 CREATE POLICY "Users can view their own capsules"
 ON public.capsules FOR SELECT
-TO authenticated
-USING (user_id = auth.email());
+TO anon
+USING (true);
 
 -- Create a policy that allows users to update their own capsules
 CREATE POLICY "Users can update their own capsules"
 ON public.capsules FOR UPDATE
-TO authenticated
-USING (user_id = auth.email()); 
+TO anon
+USING (true);
+
+-- Create a policy that allows users to delete their own capsules
+CREATE POLICY "Users can delete their own capsules"
+ON public.capsules FOR DELETE
+TO anon
+USING (true); 

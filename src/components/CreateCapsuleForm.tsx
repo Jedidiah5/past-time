@@ -60,7 +60,7 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
         setLoading(false)
         return
       }
-      const { error: insertError } = await supabase
+      const { data: insertData, error: insertError } = await supabase
         .from('capsules')
         .insert({
           user_id: userEmail,
@@ -69,7 +69,16 @@ const CreateCapsuleForm: React.FC<CreateCapsuleFormProps> = ({ userEmail, onSucc
           unlock_date: unlockDateTimeUTC,
           timezone: timezone.value,
         })
-      if (insertError) throw insertError
+        .select()
+      
+      if (insertError) {
+        console.error('Supabase insert error:', insertError)
+        throw new Error(`Failed to create capsule: ${insertError.message}`)
+      }
+      
+      if (!insertData || insertData.length === 0) {
+        throw new Error('No data returned from capsule creation')
+      }
       setSuccess(`Time capsule scheduled! You'll receive "${title}" on ${local.toLocaleString(DateTime.DATETIME_MED)} (${timezone.value}) at ${userEmail}`)
       setTitle('')
       setBody('')
