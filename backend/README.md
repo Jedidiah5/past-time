@@ -54,18 +54,61 @@ PORT=3001
 
 ## Deployment
 
-### GitHub Actions (Recommended)
+### Render (Recommended)
 
-This backend can be deployed using GitHub Actions. The workflow will:
-1. Install dependencies
-2. Run tests (if any)
-3. Deploy to your chosen platform
+This backend is configured for deployment on Render. Render is perfect for this application because it supports:
+- Background processes (cron jobs)
+- Free tier available
+- Easy environment variable management
+- Automatic deployments from GitHub
 
-### Manual Deployment
+#### Option 1: Deploy via GitHub Actions (Recommended)
 
-1. Ensure all environment variables are set on your deployment platform
-2. Install dependencies: `npm install --production`
-3. Start the server: `npm start`
+1. **Set up GitHub Secrets**:
+   - Go to your GitHub repository → Settings → Secrets and variables → Actions
+   - Add these secrets:
+     - `RENDER_TOKEN`: Your Render API token
+     - `RENDER_SERVICE_ID`: Your Render service ID
+
+2. **Get your Render API token**:
+   - Go to your Render dashboard → Account → API Keys
+   - Create a new API key
+
+3. **Get your Service ID**:
+   - After creating your service on Render, the ID will be in the URL
+   - Or find it in the service settings
+
+4. **Push to GitHub**:
+   ```bash
+   git add .
+   git commit -m "Configure Render deployment"
+   git push origin main
+   ```
+
+#### Option 2: Manual Render Setup
+
+1. **Create a new Web Service** on Render
+2. **Connect your GitHub repository**
+3. **Configure the service**:
+   - **Name**: `pasttime-backend`
+   - **Environment**: `Node`
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
+   - **Plan**: Free
+
+4. **Set Environment Variables**:
+   - `NODE_ENV`: `production`
+   - `PORT`: `10000` (Render's default)
+   - `SUPABASE_URL`: Your Supabase project URL
+   - `SUPABASE_ANON_KEY`: Your Supabase anonymous key
+   - `RESEND_API_KEY`: Your Resend API key
+
+### Other Deployment Options
+
+- **Railway**: Great for cron jobs and background processes
+- **Heroku**: Classic choice (requires credit card)
+- **DigitalOcean App Platform**: Good performance
+- **Vercel**: Good for serverless functions
 
 ## Database Schema
 
