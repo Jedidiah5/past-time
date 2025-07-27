@@ -4,7 +4,12 @@
   "description": "Backend service for sending scheduled time capsule emails.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"No tests specified\" && exit 0",
+    "lint": "echo \"No linter configured\" && exit 0",
+    "docker:build": "docker build -t pasttime-backend .",
+    "docker:run": "docker run -p 3001:3001 --env-file .env pasttime-backend"
   },
   "keywords": [],
   "author": "",
