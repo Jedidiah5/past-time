@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
-import { Clock, Plus, Calendar, Lock, Unlock, Mail, LogOut } from 'lucide-react'
+import { Clock, Plus, Calendar, Lock, Unlock, Mail, LogOut, Menu, X } from 'lucide-react'
 import { format, isAfter, formatDistanceToNow } from 'date-fns'
 import CreateCapsuleForm from './CreateCapsuleForm'
 import CapsuleCard from './CapsuleCard'
@@ -27,6 +27,7 @@ const Dashboard: React.FC<DashboardProps> = ({ initialEmail = '', initialEmailSe
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [userEmail, setUserEmail] = useState(initialEmail)
   const [emailSet, setEmailSet] = useState(initialEmailSet)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     if (!userEmail) {
@@ -154,30 +155,69 @@ const Dashboard: React.FC<DashboardProps> = ({ initialEmail = '', initialEmailSe
       <header className="fixed top-0 left-0 w-full z-30 bg-white/30 backdrop-blur-lg transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-4 md:py-6 w-full">
-            {/* Left: Nav Links */}
-            <nav className="flex items-center space-x-8">
-              <a href="#features" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Features</a>
-              <a href="#how-it-works" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">How it works</a>
-            </nav>
-            {/* Center: Logo */}
-            <div className="flex-1 flex justify-center items-center absolute left-1/2 transform -translate-x-1/2">
+            {/* Left: Logo */}
+            <div className="flex items-center">
               <div className="flex flex-col items-center">
                 <Clock className="h-8 w-8 text-indigo-600" />
                 <span className="text-xs font-bold text-gray-900 tracking-widest mt-1">PASTTIME</span>
               </div>
             </div>
+
+            {/* Center: Desktop Nav Links */}
+            <nav className="hidden md:flex items-center space-x-8">
+              <a href="#features" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Features</a>
+              <a href="#how-it-works" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">How it works</a>
+            </nav>
+
             {/* Right: User Email & Logout */}
-            <div className="flex items-center justify-end space-x-4">
-              <span className="text-gray-600 font-medium bg-white/60 px-4 py-2 rounded-full shadow-sm">{userEmail}</span>
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <span className="hidden sm:block text-gray-600 font-medium bg-white/60 px-4 py-2 rounded-full shadow-sm text-sm">{userEmail}</span>
               <button
                 onClick={onLogout}
                 title="Log out"
-                className="ml-2 p-2 rounded-full hover:bg-gray-100 transition-colors"
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
               >
                 <LogOut className="h-6 w-6 text-gray-500 hover:text-red-500" />
               </button>
+              
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+              >
+                {isMobileMenuOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
+              </button>
             </div>
           </div>
+
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden">
+              <div className="px-2 pt-2 pb-3 space-y-1 bg-white/90 rounded-lg mt-2 shadow-lg">
+                <div className="px-3 py-2 text-gray-600 font-medium bg-gray-50 rounded-md">
+                  {userEmail}
+                </div>
+                <a
+                  href="#features"
+                  className="block px-3 py-2 text-gray-600 hover:text-gray-900 font-medium transition-colors rounded-md"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Features
+                </a>
+                <a
+                  href="#how-it-works"
+                  className="block px-3 py-2 text-gray-600 hover:text-gray-900 font-medium transition-colors rounded-md"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  How it works
+                </a>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
