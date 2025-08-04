@@ -83,52 +83,52 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLearnMore }) 
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-20 lg:py-32 flex flex-col items-center justify-center text-center">
+      <section className="relative py-12 sm:py-20 lg:py-32 flex flex-col items-center justify-center text-center">
         <div className="absolute inset-0 pointer-events-none">
           <div className="w-96 h-96 bg-indigo-300 opacity-30 rounded-full blur-3xl absolute -top-32 -left-32 animate-pulse" />
           <div className="w-96 h-96 bg-purple-300 opacity-30 rounded-full blur-3xl absolute -bottom-32 -right-32 animate-pulse" />
         </div>
-        <div className="max-w-3xl mx-auto relative z-10">
+        <div className="max-w-3xl mx-auto relative z-10 px-4">
           <div className="mb-4">
-            <span className="inline-block bg-indigo-100 text-indigo-700 text-xs font-bold rounded-full px-4 py-1 tracking-widest mb-4 shadow">TIME CAPSULES</span>
-            <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
+            <span className="inline-block bg-indigo-100 text-indigo-700 text-xs font-bold rounded-full px-3 sm:px-4 py-1 tracking-widest mb-4 shadow">TIME CAPSULES</span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-4 sm:mb-6 leading-tight">
               The Most Meaningful Way To <br className="hidden md:block" />
               <span className="text-indigo-600">Connect With Your Future</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto">
               PastTime lets you send messages, memories, and goals to your future self. Lock your thoughts in a digital capsule and rediscover them when the time is right.<br />
               Celebrate milestones, reflect on your journey, and preserve your most important moments for tomorrow.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-10">
               <button
                 onClick={onGetStarted}
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-4 rounded-full text-lg font-semibold shadow-xl hover:shadow-2xl transition-all flex items-center justify-center space-x-2"
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold shadow-xl hover:shadow-2xl transition-all flex items-center justify-center space-x-2"
               >
-                <Send className="h-5 w-5" />
+                <Send className="h-4 w-4 sm:h-5 sm:w-5" />
                 <span>Get Started — For Free!</span>
               </button>
               <button
                 onClick={onLearnMore}
-                className="border border-gray-300 text-gray-700 px-8 py-4 rounded-full text-lg font-semibold bg-white/70 shadow-lg hover:bg-gray-50 transition-colors flex items-center justify-center space-x-2"
+                className="border border-gray-300 text-gray-700 px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold bg-white/70 shadow-lg hover:bg-gray-50 transition-colors flex items-center justify-center space-x-2"
               >
                 <span>See How it works</span>
-                <ArrowRight className="h-5 w-5" />
+                <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
               </button>
             </div>
           </div>
 
           {/* Image Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-            <div className="rounded-2xl overflow-hidden shadow-lg bg-white aspect-square flex items-center justify-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-12">
+            <div className="rounded-xl sm:rounded-2xl overflow-hidden shadow-lg bg-white aspect-square flex items-center justify-center">
               <img src={image0} alt="Capsule 1" className="object-cover w-full h-full" loading="lazy" />
             </div>
-            <div className="rounded-2xl overflow-hidden shadow-lg bg-white aspect-square flex items-center justify-center">
+            <div className="rounded-xl sm:rounded-2xl overflow-hidden shadow-lg bg-white aspect-square flex items-center justify-center">
               <img src={image1} alt="Capsule 2" className="object-cover w-full h-full" loading="lazy" />
             </div>
-            <div className="rounded-2xl overflow-hidden shadow-lg bg-white aspect-square flex items-center justify-center">
+            <div className="rounded-xl sm:rounded-2xl overflow-hidden shadow-lg bg-white aspect-square flex items-center justify-center">
               <img src={image2} alt="Capsule 3" className="object-cover w-full h-full" loading="lazy" />
             </div>
-            <div className="rounded-2xl overflow-hidden shadow-lg bg-white aspect-square flex items-center justify-center">
+            <div className="rounded-xl sm:rounded-2xl overflow-hidden shadow-lg bg-white aspect-square flex items-center justify-center">
               <img src={image3} alt="Capsule 4" className="object-cover w-full h-full" loading="lazy" />
             </div>
           </div>
@@ -136,27 +136,27 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLearnMore }) 
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 bg-white/80 backdrop-blur-md">
+      <section id="features" className="py-12 sm:py-20 bg-white/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">
               Why use PastTime?
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-lg sm:text-xl text-gray-600">
               Create meaningful connections with your future self
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
             {[{
-              icon: <Lock className="h-8 w-8 text-indigo-600" />,
+              icon: <Lock className="h-6 w-6 sm:h-8 sm:w-8 text-indigo-600" />,
               title: 'Time-Locked Security',
               desc: 'Messages remain sealed until your chosen date, creating genuine surprise and anticipation.'
             }, {
-              icon: <Clock className="h-8 w-8 text-indigo-600" />,
+              icon: <Clock className="h-6 w-6 sm:h-8 sm:w-8 text-indigo-600" />,
               title: 'Perfect Timing',
               desc: 'Set messages for birthdays, anniversaries, or personal milestones you want to remember.'
             }, {
-              icon: <Send className="h-8 w-8 text-indigo-600" />,
+              icon: <Send className="h-6 w-6 sm:h-8 sm:w-8 text-indigo-600" />,
               title: 'Meaningful Messages',
               desc: 'Capture thoughts, goals, and emotions to rediscover later with fresh perspective.'
             }].map((feature, i) => (
@@ -168,14 +168,14 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLearnMore }) 
                 viewport={{ once: true }}
               >
                 <Tilt glareEnable={true} glareMaxOpacity={0.2} scale={1.05} tiltMaxAngleX={15} tiltMaxAngleY={15} className="rounded-2xl">
-                  <div className="text-center bg-white/80 rounded-2xl shadow-2xl p-8 hover:shadow-indigo-200 transition-all backdrop-blur-md">
-                    <div className="bg-indigo-100 rounded-full p-3 w-16 h-16 mx-auto mb-4 flex items-center justify-center shadow-lg">
+                  <div className="text-center bg-white/80 rounded-xl sm:rounded-2xl shadow-2xl p-6 sm:p-8 hover:shadow-indigo-200 transition-all backdrop-blur-md">
+                    <div className="bg-indigo-100 rounded-full p-2 sm:p-3 w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 flex items-center justify-center shadow-lg">
                       {feature.icon}
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-sm sm:text-base text-gray-600">
                       {feature.desc}
                     </p>
                   </div>
@@ -187,47 +187,47 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onLearnMore }) 
       </section>
 
       {/* How it Works */}
-      <section id="how-it-works" className="py-20 bg-gray-50">
+      <section id="how-it-works" className="py-12 sm:py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">
               How it works
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-lg sm:text-xl text-gray-600">
               Simple steps to create your time capsule
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
             <div className="text-center">
-              <div className="bg-indigo-600 rounded-full p-3 w-12 h-12 mx-auto mb-4 flex items-center justify-center">
-                <span className="text-white font-bold">1</span>
+              <div className="bg-indigo-600 rounded-full p-2 sm:p-3 w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 flex items-center justify-center">
+                <span className="text-white font-bold text-sm sm:text-base">1</span>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
                 Write Your Message
               </h3>
-              <p className="text-gray-600">
+              <p className="text-sm sm:text-base text-gray-600">
                 Compose a heartfelt message to your future self with title and content.
               </p>
             </div>
             <div className="text-center">
-              <div className="bg-indigo-600 rounded-full p-3 w-12 h-12 mx-auto mb-4 flex items-center justify-center">
-                <span className="text-white font-bold">2</span>
+              <div className="bg-indigo-600 rounded-full p-2 sm:p-3 w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 flex items-center justify-center">
+                <span className="text-white font-bold text-sm sm:text-base">2</span>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
                 Set Unlock Date
               </h3>
-              <p className="text-gray-600">
+              <p className="text-sm sm:text-base text-gray-600">
                 Choose when you want to receive your message - days, months, or years ahead.
               </p>
             </div>
             <div className="text-center">
-              <div className="bg-indigo-600 rounded-full p-3 w-12 h-12 mx-auto mb-4 flex items-center justify-center">
-                <span className="text-white font-bold">3</span>
+              <div className="bg-indigo-600 rounded-full p-2 sm:p-3 w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 flex items-center justify-center">
+                <span className="text-white font-bold text-sm sm:text-base">3</span>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
                 Rediscover
               </h3>
-              <p className="text-gray-600">
+              <p className="text-sm sm:text-base text-gray-600">
                 Your capsule unlocks automatically, delivering your past wisdom at the perfect moment.
               </p>
             </div>
